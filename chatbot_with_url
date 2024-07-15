@@ -16,11 +16,11 @@ class ChatbotGUI:
         
         
         self.data = {
-            "Tell me about Technologica": "https://technologica.ma/",
-            "Services offered by Technologica": "https://technologica.ma/services/",
-            "Which products do you sell": "https://technologica.ma/products/",
-            "Promotions": "https://technologica.ma/promotion/",
-            "Contact information": "https://technologica.ma/contact/"
+            "Tell me about Technologica": " URL of the website ",
+            "Services offered by Technologica": "URL of the services page ",
+            "Which products do you sell": "URL of the products page ",
+            "Promotions": "URL of the promotions page ",
+            "Contact information": "URL of the contact page "
         }
         
         
