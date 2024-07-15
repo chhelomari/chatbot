@@ -1,0 +1,41 @@
+import tkinter as tk
+import webbrowser
+
+
+def open_url(url):
+    webbrowser.open_new_tab(url)
+
+
+class ChatbotGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Chatbot")
+        
+        self.chat_window = tk.Text(root, wrap='word', width=50, height=20)
+        self.chat_window.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+        
+        
+        self.data = {
+            "Tell me about Technologica": "https://technologica.ma/",
+            "Services offered by Technologica": "https://technologica.ma/services/",
+            "Which products do you sell": "https://technologica.ma/products/",
+            "Promotions": "https://technologica.ma/promotion/",
+            "Contact information": "https://technologica.ma/contact/"
+        }
+        
+        
+        self.buttons = []
+        for idx, (option_text, url) in enumerate(self.data.items()):
+            button = tk.Button(root, text=option_text, command=lambda url=url: open_url(url))
+            button.grid(row=idx + 1, column=0, padx=10, pady=5, sticky='w')
+            self.buttons.append(button)
+        
+    def display_message(self, message):
+        self.chat_window.configure(state='normal')
+        self.chat_window.insert(tk.END, message + '\n')
+        self.chat_window.configure(state='disabled')
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ChatbotGUI(root)
+    root.mainloop()
