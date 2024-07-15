@@ -1,0 +1,71 @@
+import requests
+from bs4 import BeautifulSoup
+import tkinter as tk
+from Tkinter import scrolledtext
+
+# get data from the website
+def fetch_data():
+    url = "URL of the company's website"
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    
+    # extract data using a specific HTML structure
+    description_elem = soup.find("p", class_="site-description")
+    description = description_elem.text.strip() if description_elem else " description of the company "
+    
+    services_elem = soup.find("div", class_="services-offered")
+    services = services_elem.text.strip() if services_elem else " Services offered by the company "
+    
+    products_elem = soup.find("ul", class_="product-list")
+    products = products_elem.text.strip() if products_elem else " Products being sold in the company"
+    
+    promotions_elem = soup.find("div", class_="current-promotions")
+    promotions = promotions_elem.text.strip() if promotions_elem else ""
+    
+    contact_elem = soup.find("div", class_="contact-details")
+    contact_info = contact_elem.text.strip() if contact_elem else "Contact information not found"
+
+    contact_elem = soup.find("div", class_="opening and closing times")
+    contact_info = contact_elem.text.strip() if contact_elem else "Contact information not found"
+    
+    return {
+        "Tell me about your company": description,
+        "Services offered by your company": services,
+        "Which products do you sell": products,
+        "Promotions": promotions,
+        "Contact information": contact_info
+    }
+
+# initialize the tkinter GUI
+class ChatbotGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Chatbot")
+        
+        self.chat_window = scrolledtext.ScrolledText(root, state='disabled', wrap='word', width=50, height=20)
+        self.chat_window.grid(row=0, column=0, padx=10, pady=10, columnspan=2)
+        
+        # Fetch data from the website
+        self.data = fetch_data()
+        
+        # Create buttons for options
+        self.buttons = []
+        for idx, (option_text, _) in enumerate(self.data.items()):
+            button = tk.Button(root, text=option_text, command=lambda option_text=option_text: self.display_response(option_text))
+            button.grid(row=idx + 1, column=0, padx=10, pady=5, sticky='w')
+            self.buttons.append(button)
+        
+    def display_response(self, option_text):
+        bot_response = self.data[option_text]
+        self.display_message("Bot: " + bot_response)
+
+    def display_message(self, message):
+        self.chat_window.configure(state='normal')
+        self.chat_window.insert(tk.END, message + '\n')
+        self.chat_window.configure(state='disabled')
+        self.chat_window.yview(tk.END)
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ChatbotGUI(root)
+    root.mainloop()
